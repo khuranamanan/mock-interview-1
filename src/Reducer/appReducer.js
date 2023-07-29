@@ -10,6 +10,7 @@ import {
   REMOVE_FROM_WATCH_LATER,
   UPDATE_NOTE,
 } from "../Utils/constants";
+import { toast } from "react-toastify";
 
 export const initialState = {
   watchLater: localStorage.getItem("watchLater")
@@ -30,6 +31,7 @@ export const appReducer = (state, action) => {
         ...new Set([...state.watchLater, action.payload.videoId]),
       ];
       localStorage.setItem("watchLater", JSON.stringify(updatedWatchLater));
+      toast.success("Added to Watch Later");
       return {
         ...state,
         watchLater: updatedWatchLater,
@@ -44,6 +46,7 @@ export const appReducer = (state, action) => {
         "watchLater",
         JSON.stringify(updatedWatchLaterWithoutVideo)
       );
+      toast.success("Removed from Watch Later");
       return {
         ...state,
         watchLater: updatedWatchLaterWithoutVideo,
@@ -58,6 +61,7 @@ export const appReducer = (state, action) => {
       };
       const updatedPlaylists = [...state.playlists, newPlaylist];
       localStorage.setItem("playlists", JSON.stringify(updatedPlaylists));
+      toast.success(`${action.payload.playlistName} Playlist Created`);
       return {
         ...state,
         playlists: updatedPlaylists,
@@ -72,6 +76,7 @@ export const appReducer = (state, action) => {
         "playlists",
         JSON.stringify(updatedPlaylistsWithoutDeleted)
       );
+      toast.success(`Playlist Deleted`);
       return {
         ...state,
         playlists: updatedPlaylistsWithoutDeleted,
@@ -91,6 +96,7 @@ export const appReducer = (state, action) => {
         "playlists",
         JSON.stringify(updatedPlaylistsWithVideo)
       );
+      toast.success("Video Added to Playlist");
       return {
         ...state,
         playlists: updatedPlaylistsWithVideo,
@@ -112,6 +118,7 @@ export const appReducer = (state, action) => {
         "playlists",
         JSON.stringify(updatedPlaylistsWithoutVideo)
       );
+      toast.success("Video Removed from Playlist");
       return {
         ...state,
         playlists: updatedPlaylistsWithoutVideo,
@@ -126,6 +133,7 @@ export const appReducer = (state, action) => {
         ],
       };
       localStorage.setItem("notes", JSON.stringify(updatedNotesForVideo));
+      toast.success("Note added to Video");
       return {
         ...state,
         notes: updatedNotesForVideo,
@@ -146,6 +154,7 @@ export const appReducer = (state, action) => {
         "notes",
         JSON.stringify(updatedNotesForVideoWithUpdate)
       );
+      toast.success("Note Successfully Updated");
       return {
         ...state,
         notes: updatedNotesForVideoWithUpdate,
@@ -163,6 +172,7 @@ export const appReducer = (state, action) => {
         "notes",
         JSON.stringify(updatedNotesForVideoWithoutDelete)
       );
+      toast.success("Note Deleted");
       return {
         ...state,
         notes: updatedNotesForVideoWithoutDelete,
