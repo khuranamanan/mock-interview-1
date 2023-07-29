@@ -84,14 +84,28 @@ export const appReducer = (state, action) => {
     }
 
     case ADD_TO_PLAYLIST: {
+      const playlistId = action.payload.playlistId;
+      const videoId = action.payload.videoId;
+
+      const playlistExists = state.playlists.some(
+        (playlist) =>
+          playlist.id === playlistId && playlist.videos.includes(videoId)
+      );
+
+      if (playlistExists) {
+        toast.warning("This video is already in the playlist.");
+        return state;
+      }
+
       const updatedPlaylistsWithVideo = state.playlists.map((playlist) =>
-        playlist.id === action.payload.playlistId
+        playlist.id === playlistId
           ? {
               ...playlist,
-              videos: [...playlist.videos, action.payload.videoId],
+              videos: [...playlist.videos, videoId],
             }
           : playlist
       );
+
       localStorage.setItem(
         "playlists",
         JSON.stringify(updatedPlaylistsWithVideo)
