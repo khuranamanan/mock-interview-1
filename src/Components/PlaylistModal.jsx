@@ -6,13 +6,65 @@ function PlaylistModal({
   isOpen,
   closeModal,
   playlists,
-  newPlaylistName,
-  setNewPlaylistName,
   selectedPlaylist,
   setSelectedPlaylist,
-  handleCreatePlaylist,
   handleAddToPlaylist,
+  openCreateModal,
 }) {
+  function closeAddOpenCreate() {
+    closeModal();
+    openCreateModal();
+  }
+
+  const playlistEmpty = (
+    <div className="flex flex-col">
+      <p className="text-center text-gray-500 mb-4">
+        No playlists found. Please Create a playlist first.
+      </p>
+      <button
+        className="self-end inline-flex justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+        onClick={closeAddOpenCreate}
+      >
+        Create a Playlist
+      </button>
+    </div>
+  );
+
+  const addToPlaylistEle = (
+    <>
+      <select
+        value={selectedPlaylist}
+        onChange={(e) => setSelectedPlaylist(e.target.value)}
+        className="px-3 py-2 border border-gray-300 rounded-md w-full mb-4"
+      >
+        <option value="" disabled>
+          Select Playlist
+        </option>
+        {playlists.map((playlist) => (
+          <option key={playlist.id} value={playlist.id}>
+            {playlist.name}
+          </option>
+        ))}
+      </select>
+
+      <div className="flex justify-end gap-2">
+        <button
+          className="inline-flex justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          onClick={handleAddToPlaylist}
+        >
+          Add to Playlist
+        </button>
+        <button
+          type="button"
+          className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          onClick={closeModal}
+        >
+          Close
+        </button>
+      </div>
+    </>
+  );
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -40,60 +92,11 @@ function PlaylistModal({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900"
-                >
+                <Dialog.Title as="h3" className="text-xl font-bold mb-4">
                   Save to Playlist
                 </Dialog.Title>
-                <div className="mt-4">
-                  <input
-                    type="text"
-                    placeholder="New Playlist Name"
-                    value={newPlaylistName}
-                    onChange={(e) => setNewPlaylistName(e.target.value)}
-                    className="border rounded-md p-2 w-full"
-                  />
-                  <button
-                    className="bg-green-500 text-white px-4 py-2 rounded-lg mt-2"
-                    onClick={handleCreatePlaylist}
-                  >
-                    Create Playlist
-                  </button>
-                </div>
 
-                <div className="mt-4">
-                  <select
-                    value={selectedPlaylist}
-                    onChange={(e) => setSelectedPlaylist(e.target.value)}
-                    className="border rounded-md p-2 w-full"
-                  >
-                    <option value="" disabled>
-                      Select Playlist
-                    </option>
-                    {playlists.map((playlist) => (
-                      <option key={playlist.id} value={playlist.id}>
-                        {playlist.name}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2"
-                    onClick={handleAddToPlaylist}
-                  >
-                    Add to Playlist
-                  </button>
-                </div>
-
-                <div className="mt-4">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={closeModal}
-                  >
-                    Close
-                  </button>
-                </div>
+                {playlists.length === 0 ? playlistEmpty : addToPlaylistEle}
               </Dialog.Panel>
             </Transition.Child>
           </div>

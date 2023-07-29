@@ -5,11 +5,11 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import {
   ADD_TO_PLAYLIST,
   ADD_TO_WATCH_LATER,
-  CREATE_PLAYLIST,
   REMOVE_FROM_WATCH_LATER,
 } from "../Utils/constants";
 import PlaylistModal from "../Components/PlaylistModal";
 import NotesSection from "../Components/NotesSection";
+import CreatePlaylistModal from "../Components/CreatePlaylistModal";
 
 function VideoPage() {
   const { vidId } = useParams();
@@ -22,8 +22,16 @@ function VideoPage() {
   const currVideo = videos.find(({ _id }) => _id === Number(vidId));
 
   const [playlistModalOpen, setPlaylistModalOpen] = useState(false);
-  const [newPlaylistName, setNewPlaylistName] = useState("");
   const [selectedPlaylist, setSelectedPlaylist] = useState("");
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+
+  function openCreateModal() {
+    setCreateModalOpen(true);
+  }
+
+  function closeCreateModal() {
+    setCreateModalOpen(false);
+  }
 
   function closePlaylistModal() {
     setPlaylistModalOpen(false);
@@ -57,14 +65,6 @@ function VideoPage() {
       Watch Later
     </button>
   );
-
-  function handleCreatePlaylist() {
-    dispatch({
-      type: CREATE_PLAYLIST,
-      payload: { playlistName: newPlaylistName },
-    });
-    setNewPlaylistName("");
-  }
 
   function handleAddToPlaylist() {
     dispatch({
@@ -103,6 +103,19 @@ function VideoPage() {
         <div>
           <button
             className="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-400"
+            onClick={openCreateModal}
+          >
+            Create Playlist
+          </button>
+
+          <CreatePlaylistModal
+            isOpen={createModalOpen}
+            closeModal={closeCreateModal}
+          />
+        </div>
+        <div>
+          <button
+            className="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-400"
             onClick={() => {
               setPlaylistModalOpen(true);
             }}
@@ -113,12 +126,10 @@ function VideoPage() {
             isOpen={playlistModalOpen}
             closeModal={closePlaylistModal}
             playlists={playlists}
-            newPlaylistName={newPlaylistName}
-            setNewPlaylistName={setNewPlaylistName}
             selectedPlaylist={selectedPlaylist}
             setSelectedPlaylist={setSelectedPlaylist}
-            handleCreatePlaylist={handleCreatePlaylist}
             handleAddToPlaylist={handleAddToPlaylist}
+            openCreateModal={openCreateModal}
           />
         </div>
       </div>

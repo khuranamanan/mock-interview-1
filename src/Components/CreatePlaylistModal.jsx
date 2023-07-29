@@ -1,13 +1,11 @@
 /* eslint-disable react/prop-types */
 import { Fragment, useState } from "react";
 import { useData } from "../Context/DataContext";
-import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import { CREATE_PLAYLIST } from "../Utils/constants";
 
 function CreatePlaylistModal({ isOpen, closeModal }) {
   const [newPlaylistName, setNewPlaylistName] = useState("");
-  const navigate = useNavigate();
   const { dispatch } = useData();
 
   function handleCreatePlaylist() {
@@ -17,7 +15,6 @@ function CreatePlaylistModal({ isOpen, closeModal }) {
     });
     setNewPlaylistName("");
     closeModal();
-    navigate("/playlists");
   }
 
   return (
@@ -59,7 +56,7 @@ function CreatePlaylistModal({ isOpen, closeModal }) {
                 />
                 <div className="flex justify-end">
                   <button
-                    className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-400 mr-2"
+                    className="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-400 mr-2"
                     onClick={handleCreatePlaylist}
                   >
                     Create
